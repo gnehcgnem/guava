@@ -32,7 +32,7 @@ public class CurrentLimitAop {
         try {
             //获取拦截方法名称
             MethodSignature signature = (MethodSignature) JoinPoint.getSignature();
-
+            //获取特定注解
             LimitAop limitAop = signature.getMethod().getDeclaredAnnotation(LimitAop.class);
 
             String name=limitAop.name();
@@ -40,12 +40,12 @@ public class CurrentLimitAop {
             double token = limitAop.token();
 
             RateLimiter rateLimiter = ratelimiters.get(name);
-
+            //不存在此方法的ratelimer类则加入map中
             if (rateLimiter == null) {
                 rateLimiter = RateLimiter.create(token);
                 ratelimiters.put(name, rateLimiter);
             }
-
+            //尝试获取令牌桶
             boolean b = rateLimiter.tryAcquire();
             if (!b) {
                 return "当前请求过多，请稍后重试";
