@@ -39,8 +39,6 @@ public class CurrentLimitAop {
 
             double token = limitAop.token();
 
-            System.out.println("令牌桶限制"+token);
-
             RateLimiter rateLimiter = ratelimiters.get(name);
             //不存在此方法的ratelimer类则加入map中
             if (rateLimiter == null) {
